@@ -1,0 +1,9 @@
+app*/
+KE*/
+*.log
+*.root
+*.png
+*.d
+*.so
+*.json
+

@@ -1,0 +1,75 @@
+# /rat/db/set DETECTOR experiment "cylinder"
+# /rat/db/set DETECTOR geo_file "cylinder/cylinder.geo"
+/rat/db/set DETECTOR experiment "NSRL16A"
+/rat/db/set DETECTOR geo_file "NSRL16A/NSRL16A.geo"
+
+/run/initialize
+
+/glg4scint/off
+
+
+# /vis/scene/create
+# /vis/open OGLSQt
+# /vis/drawVolume
+
+# /vis/scene/add/volume
+# /vis/scene/add/trajectories smooth
+# /vis/modeling/trajectories/create/drawByCharge
+# /vis/modeling/trajectories/drawByCharge-0/set 1 yellow
+# /vis/modeling/trajectories/drawByCharge-0/set -1 red
+# /vis/modeling/trajectories/drawByCharge-0/set 0 white
+# /vis/modeling/trajectories/drawByCharge-0/default/setDrawStepPts true
+# /vis/modeling/trajectories/drawByCharge-0/default/setStepPtsSize 1
+
+# /vis/filtering/trajectories/create/particleFilter
+# /vis/filtering/trajectories/particleFilter-0/add mu-
+# /vis/filtering/trajectories/particleFilter-0/invert true
+# /vis/filtering/trajectories/particleFilter-0/verbose true
+# /vis/filtering/trajectories/particleFilter-0/active false
+
+# /vis/modeling/trajectories/create/drawByParticleID
+# /vis/modeling/trajectories/drawByParticleID-0/set mu- white
+# /vis/modeling/trajectories/drawByParticleID-0/set e- yellow
+# /vis/modeling/trajectories/drawByParticleID-0/default/setDrawStepPts true
+# /vis/modeling/trajectories/drawByParticleID-0/default/setStepPtsSize 1
+
+# /vis/modeling/trajectories/select drawByParticleID-0
+
+
+# /vis/ogl/set/displayListLimit 10000000
+
+# /vis/scene/add/hits
+# /vis/scene/endOfEventAction accumulate 1
+# /vis/viewer/set/autoRefresh true
+
+
+# /vis/viewer/reset
+# /vis/viewer/set/style surface
+# /vis/viewer/set/viewpointThetaPhi 60 60 deg
+# /vis/viewer/set/viewpointThetaPhi 90 -180 deg
+# /vis/viewer/set/upVector 0 1 0
+
+
+# /vis/scene/add/axes 0 0 0 50 mm
+
+/tracking/storeTrajectory 1
+
+# BEGIN EVENT LOOP
+/rat/proc simpledaq
+/rat/proc count
+/rat/procset update 100
+
+# /rat/proc prune
+# /rat/procset prune "mc.track:opticalphoton"
+
+/rat/proclast outroot
+/rat/procset file "KE240MeV_AB20cm_veto_5x5gen.root"
+#END EVENT LOOP
+
+# /generator/add combo gun:point
+/generator/add combo gun:fill
+/generator/vtx/set proton  0 0 1 240
+/generator/pos/set 0 0 -900
+
+
+/run/beamOn 50000

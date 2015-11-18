@@ -1,0 +1,71 @@
+# /rat/db/set DETECTOR experiment "cylinder"
+# /rat/db/set DETECTOR geo_file "cylinder/cylinder.geo"
+/rat/db/set DETECTOR experiment "BNL1ton"
+/rat/db/set DETECTOR geo_file "BNL1ton/BNL1ton.geo"
+
+/run/initialize
+
+
+# /vis/scene/create
+/vis/open OGLSQt
+/vis/drawVolume
+
+# /vis/scene/add/volume
+/vis/scene/add/trajectories smooth
+/vis/modeling/trajectories/create/drawByCharge
+/vis/modeling/trajectories/drawByCharge-0/set 1 yellow
+/vis/modeling/trajectories/drawByCharge-0/set -1 red
+/vis/modeling/trajectories/drawByCharge-0/set 0 white
+/vis/modeling/trajectories/drawByCharge-0/default/setDrawStepPts true
+/vis/modeling/trajectories/drawByCharge-0/default/setStepPtsSize 1
+
+# /vis/filtering/trajectories/create/particleFilter
+# /vis/filtering/trajectories/particleFilter-0/add mu-
+# /vis/filtering/trajectories/particleFilter-0/invert true
+# /vis/filtering/trajectories/particleFilter-0/verbose true
+# /vis/filtering/trajectories/particleFilter-0/active false
+
+# /vis/modeling/trajectories/create/drawByParticleID
+# /vis/modeling/trajectories/drawByParticleID-0/set mu- white
+# /vis/modeling/trajectories/drawByParticleID-0/set e- yellow
+# /vis/modeling/trajectories/drawByParticleID-0/default/setDrawStepPts true
+# /vis/modeling/trajectories/drawByParticleID-0/default/setStepPtsSize 1
+
+# /vis/modeling/trajectories/select drawByParticleID-0
+
+
+/vis/ogl/set/displayListLimit 10000000
+
+# /vis/scene/add/hits
+/vis/scene/endOfEventAction accumulate 1
+# /vis/viewer/set/autoRefresh true
+
+
+/vis/viewer/reset
+/vis/viewer/set/style surface
+/vis/viewer/set/viewpointThetaPhi 60 60 deg
+/vis/viewer/set/upVector 0 0 1
+
+
+# /vis/scene/add/axes 0 0 0 500 mm
+
+# /tracking/storeTrajectory 0
+
+# BEGIN EVENT LOOP
+# /rat/proc simpledaq
+/rat/proc count
+/rat/procset update 1
+
+# /rat/proc prune
+# /rat/procset prune "mc.track:opticalphoton"
+
+/rat/proclast outroot
+/rat/procset file "test.root"
+#END EVENT LOOP
+
+/generator/add combo gun:point
+/generator/vtx/set mu-  0 0 -1 20000
+/generator/pos/set 0 0 1200
+
+
+# /run/beamOn 1

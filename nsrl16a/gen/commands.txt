@@ -1,0 +1,1 @@
+ cp -r KE450MeV_AB20cm KE300MeV_AB20cm; pushd KE300MeV_AB20cm; sed -i 's/450/300/' gen.mac; ./run.sh; popd
