@@ -1,9 +1,11 @@
 app*/
 KE*/
+.ipynb_checkpoints/
 *.log
 *.root
 *.png
 *.d
 *.so
 *.json
+Thumbs.db
 
